@@ -26,10 +26,6 @@ fi
 ### git env
 export GIT_ROOT="$HOME/workspace/git"
 export GIT_ROOT_DATA="$GIT_ROOT/Data"
-export GIT_ROOT_HYDRA="$GIT_ROOT/Hydra"
-export GIT_ROOT_LP="$GIT_ROOT/LaunchPoint"
-export GIT_ROOT_SYNACK="$GIT_ROOT/Synack"
-export GIT_ACCESS_TOKEN="893e917437a693e99a52fd067a2e8ee69c9cb26c"
 
 ## aliases
 
@@ -77,8 +73,6 @@ alias js_gcp="if [ ! -d node_modules ]; then ln -s $HOME/workspace/js_env/gcp/no
 alias js_env="pushd . && cd $HOME/workspace/js_env"
 
 ### go env
-alias gohydra="if [[ $PWD != "$GOPATH"* ]]; then cd ${PWD/$GIT_ROOT_HYDRA/$GOPATH/src/git.synack.com}; fi"
-alias gosynack="if [[ $PWD != "$GOPATH"* ]]; then cd ${PWD/$GIT_ROOT_SYNACK/$GOPATH/src/git.synack.com/Synack}; fi"
 
 ### -- allow export env variables (x=v) without "export x=v"
 # set -a

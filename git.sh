@@ -25,7 +25,7 @@ function __help {
     echo "      pack=[all]|[s|source]|[j|jar]. may set optional pack target. default is source files only. "
     echo "    config: check config on each repo. "
     echo "      use [config-] to remove auto generated configurations. "
-    echo "  repo_root: [Data|Hydra|LaunchPoint|Synack]. default to \"\$GIT_ROOT\Data\". "
+    echo "  repo_root: [Data|Other]. default to \"\$GIT_ROOT\Data\". "
     echo "      optionally: use \".\" for current directory."
 }
 
