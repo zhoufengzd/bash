@@ -8,7 +8,7 @@ wk_dir=$(pwd)
 script_dir="$(cd "$(dirname "$(readlink ${BASH_SOURCE[0]})")" && pwd)"
 
 default_profile_path="$HOME/.env/service_env"
-service_home="/host/bin/service"
+service_home="/host/bin/svc"
 config_home="/host/config"
 svc_list="airflow|elasticsearch|h2o|hadoop|kibana|mongo|mysql|nifi|postgres|rabbit|redis"
 

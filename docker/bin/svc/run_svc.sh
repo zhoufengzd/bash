@@ -43,7 +43,7 @@ function main() {
     fi
 
     profile_path=".""$svc_name""_env"
-    /host/bin/service/svc_env.sh set $svc_name $profile_path && source $profile_path && rm $profile_path
+    /host/bin/svc/svc_env.sh set $svc_name $profile_path && source $profile_path && rm $profile_path
     local pids=""
     if [[ $svc_name == "airflow" ]] || [[ $svc_name == "all" ]]; then
         if [[ $action == "start" ]]; then
