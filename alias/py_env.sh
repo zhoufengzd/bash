@@ -1,7 +1,7 @@
 ## python environment quick access
 
 function pyenv() {
-    py_env_home="$HOME/workspace/py_env"
+    py_env_home="$HOME/workspace/env/py_env"
 
     venv_name=$1
     if [ -e ${py_env_home}/${venv_name}/bin/activate ]; then
@@ -10,9 +10,9 @@ function pyenv() {
         export PYTHONPATH=$(pwd):$PYTHONPATH
         echo PYTHONPATH=$PYTHONPATH
     else
-        echo "python venv at \$HOME/workspace/py_env:"
+        echo "python venv at \$HOME/workspace/env/py_env:"
         echo "-------------------------------------------"
-        ls ${py_env_home} | grep -v ".config"
+        echo "$(cd ${py_env_home} && ls -d */ | grep -v _requirements)"
     fi
 }
 
