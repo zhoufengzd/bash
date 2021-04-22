@@ -1,7 +1,7 @@
 ## python environment quick access
 
 function pyenv() {
-    py_env_home="$HOME/workspace/env/py_env"
+    py_env_home="$HOME/workspace/bin/svc/bin/venv/py_env"
 
     venv_name=$1
     if [ -e ${py_env_home}/${venv_name}/bin/activate ]; then

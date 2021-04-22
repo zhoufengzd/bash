@@ -15,7 +15,7 @@ fi
 
 ## env:
 sys_path="/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin"
-local_bin="$HOME/workspace/bin"
+local_bin="$HOME/workspace/bin/script"
 export PATH=$local_bin:$sys_path
 export BASH_UTIL_LIB="$local_bin/util"
 
