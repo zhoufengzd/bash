@@ -1,0 +1,24 @@
+# bash profile for interactive shell
+#   -- used for remote system / vm image / docker etc which were not created locally here.
+# if [ "$BASH" ] && [ -e $AIRFLOW_HOME/bin/_bash_profile ]; then source $AIRFLOW_HOME/bin/_bash_profile; fi
+if [ -f ~/.bashrc ]; then
+   source ~/.bashrc
+fi
+
+# shell prompt & color
+if [[ $(whoami) == "root" ]] || [[ $(whoami) == "airflow" ]]; then
+    PS1="...\W# "
+else
+    PS1="...\W$ "
+fi
+
+# path
+sys_path="/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin"
+local_bin="$HOME/bin"
+export PATH=$local_bin:$sys_path
+export BASH_UTIL_LIB="$local_bin/util"
+
+env=$(ls $HOME/.env/* 2>/dev/null)
+for env in ${envs[@]}; do source $env; done
+
+unset LS_COLORS
