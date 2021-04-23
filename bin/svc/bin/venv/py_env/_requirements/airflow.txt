@@ -1,0 +1,3 @@
+apache-airflow[gcp_api, postgres]
+google-cloud-datastore
+google-cloud-storage

@@ -12,7 +12,8 @@ function pyenv() {
     else
         echo "python venv at \$HOME/workspace/env/py_env:"
         echo "-------------------------------------------"
-        echo "$(cd ${py_env_home} && ls -d */ | grep -v _requirements)"
+        # echo "$(cd ${py_env_home} && ls -d */ | grep -v _requirements)"
+        cd ${py_env_home} && ls -d */ | grep -v _requirements
     fi
 }
 

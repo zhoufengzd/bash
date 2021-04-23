@@ -120,15 +120,16 @@ function main() {
         cmd="gcloud config set project $GCP_PROJECT"
         echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
 
-        cmd="gcloud config set compute/region $GCP_REGION"
-        echo $cmd && $cmd > /dev/null 2>&1
-        cmd="gcloud config set compute/zone $GCP_ZONE"
-        echo $cmd && echo $SC_SHORT_LINE && $cmd > /dev/null 2>&1 && echo ""
-
-        if [ ! -z "$GCP_CLUSTER" ]; then
-            cmd="gcloud container clusters get-credentials $GCP_CLUSTER"
-            echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-        fi
+        ## TODO: temporarily disabled
+        # cmd="gcloud config set compute/region $GCP_REGION"
+        # echo $cmd && $cmd > /dev/null 2>&1
+        # cmd="gcloud config set compute/zone $GCP_ZONE"
+        # echo $cmd && echo $SC_SHORT_LINE && $cmd > /dev/null 2>&1 && echo ""
+        #
+        # if [ ! -z "$GCP_CLUSTER" ]; then
+        #     cmd="gcloud container clusters get-credentials $GCP_CLUSTER"
+        #     echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
+        # fi
     fi
 }
 
