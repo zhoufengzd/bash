@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## run service
-source $BASH_UTIL_LIB/argparse.sh
+source $BASH_LIB/argparse.sh
 
 svc_list="airflow|elasticsearch|h2o|hadoop|kibana|mongo|mysql|nifi|postgres|rabbit|redis"
 function __help {

@@ -1,7 +1,7 @@
 #!/usr/bin/env bash
 #set -e
-source $BASH_UTIL_LIB/argparse.sh
-source $BASH_UTIL_LIB/constants.sh
+source $BASH_LIB/argparse.sh
+source $BASH_LIB/constants.sh
 
 ## environment:
 default_ifs="$IFS"

@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## build service profile
-source $BASH_UTIL_LIB/argparse.sh
+source $BASH_LIB/argparse.sh
 
 ## environment:
 default_ifs="$IFS"

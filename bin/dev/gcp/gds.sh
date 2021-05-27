@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-source $BASH_UTIL_LIB/argparse.sh
+source $BASH_LIB/argparse.sh
 source $HOME/.env/gcp_env
 
 ## environment:

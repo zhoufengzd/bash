@@ -17,7 +17,7 @@ fi
 sys_path="/usr/local/bin:/usr/bin:/usr/sbin:/sbin:/bin"
 local_bin="$HOME/workspace/bin/script"
 export PATH=$local_bin:$sys_path
-export BASH_UTIL_LIB="$local_bin/util"
+export BASH_LIB="$local_bin/util"
 
 envs=$(ls $HOME/.env/* 2>/dev/null)
 for env in ${envs[@]}; do source $env; done

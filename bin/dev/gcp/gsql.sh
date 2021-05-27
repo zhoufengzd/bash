@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## automatically set up proxy and connect to instances
-source $BASH_UTIL_LIB/argparse.sh
+source $BASH_LIB/argparse.sh
 
 ## environment:
 default_ifs="$IFS"
