@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ##   Help interact with google cloud
-source $BASH_UTIL_LIB/params.sh
+source $BASH_UTIL_LIB/argparse.sh
 source $BASH_UTIL_LIB/constants.sh
 
 ## environment:

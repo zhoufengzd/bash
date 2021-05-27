@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## -- link files by pattern
-source $BASH_UTIL_LIB/params.sh
+source $BASH_UTIL_LIB/argparse.sh
 
 ## environment:
 default_ifs="$IFS"

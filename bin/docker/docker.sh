@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 
-source $BASH_UTIL_LIB/params.sh
+source $BASH_UTIL_LIB/argparse.sh
 key_map["h"]="host"
 key_map["p"]="port"
 key_map["m"]="mount"

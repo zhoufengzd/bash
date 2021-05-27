@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## automatically figure project / zone info, build parameters for ssh tunneling
-source $BASH_UTIL_LIB/params.sh
+source $BASH_UTIL_LIB/argparse.sh
 source $BASH_UTIL_LIB/constants.sh
 
 ## environment:

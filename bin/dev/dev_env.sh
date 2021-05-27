@@ -1,6 +1,6 @@
 #!/usr/bin/env bash
 ## build dev profile
-source $BASH_UTIL_LIB/params.sh
+source $BASH_UTIL_LIB/argparse.sh
 
 default_profile_path="$HOME/.env/dev_env"
 env_home="$HOME/workspace/bin/dev"
