@@ -29,22 +29,27 @@ function __help() {
 }
 
 function __set_env() {
+    # host name and mount directory
     local profile_path="$HOME/.env/docker_env"
-
-    local host_dir="/host"
-    local source_dir="$HOME/workspace/docker_images/_shared"
-    local -a dirs=(bin config data log downloads workspace)
-
-    mkdir -p $host_dir && cd $host_dir
     echo "#!/usr/bin/env bash" > $profile_path
     echo "" >> $profile_path
     echo "export DOCKER_HOSTNAME=\"$(hostname)\"" >> $profile_path
-    for dir_mapped in ${dirs[@]}; do
-        if [ -L $dir_mapped ]; then sudo unlink $dir_mapped; fi
-        sudo ln -s $source_dir/$dir_mapped $dir_mapped
 
-        echo "export DOCKER_MOUNT_DIR=\"\$DOCKER_MOUNT_DIR -v $source_dir/$dir_mapped:/host/$dir_mapped\"" >> $profile_path
-    done
+    # mount local workspace
+    local host_dir="/host"
+    echo "export DOCKER_MOUNT_DIR=\"\$DOCKER_MOUNT_DIR -v $HOME/workspace:/host/workspace\"" >> $profile_path
+
+    # local host_dir="/host"
+    # local source_dir="$HOME/workspace/docker_images/_shared" 
+    # local -a dirs=(bin config data log downloads workspace)
+
+    # sudo mkdir -p $host_dir && cd $host_dir
+    # for dir_mapped in ${dirs[@]}; do
+    #     if [ -L $dir_mapped ]; then sudo unlink $dir_mapped; fi
+    #     sudo ln -s $source_dir/$dir_mapped $dir_mapped
+
+    #     echo "export DOCKER_MOUNT_DIR=\"\$DOCKER_MOUNT_DIR -v $source_dir/$dir_mapped:/host/$dir_mapped\"" >> $profile_path
+    # done
 
     cmd="cat $profile_path"
     echo $cmd && echo "" && $cmd
