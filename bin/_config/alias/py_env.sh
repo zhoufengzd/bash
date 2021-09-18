@@ -36,3 +36,5 @@ alias venv="if [ -e ./venv/bin/activate ]; then source ./venv/bin/activate; else
 alias pipup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install --upgrade && pip install pipdeptree > /dev/null"
 alias pipoff="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip uninstall -y"
 alias pip3off="pip3 freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip3 uninstall -y"
+
+alias condaenv="source /usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
