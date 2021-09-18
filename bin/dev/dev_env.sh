@@ -87,7 +87,7 @@ function main() {
         if [[ $env_name == "java9" ]]; then
             jdk_version="jdk-9.0.4";
         elif [[ $env_name == "java8" ]]; then
-            jdk_version="jdk1.8.0_202"
+            jdk_version="jdk1.8.0_301"
         fi
         if [[ $(uname) == "Darwin" ]]; then
             java_home="/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home"
