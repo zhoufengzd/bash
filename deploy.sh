@@ -36,8 +36,21 @@ function _update_desktop() {
     fi
 }
 
-function _update_venv() {
-    ln -s $(pwd)/venv/py_env/_requirements $workspace/bin/svc/bin/venv/py_env/_requirements
+function _update_profile() {
+    local profiles=(.bash_profile)
+
+    # backup existing profile
+    cd $HOME
+    for f in ${profiles[@]}; do
+        if [[ ! -L ${f} && -e ${f} ]]; then
+            cmd="mv ${f} ${f}.bak"
+            echo $cmd && $cmd
+        fi
+    done
+
+    cd $wk_dir
+    cmd="ln -s $wk_dir/bin/_config/profile/bash_profile.sh $HOME/.bash_profile"
+    echo $cmd && $cmd
 }
 
 function _link_env_alias() {
@@ -60,9 +73,9 @@ function _link_git_config() {
 function main() {
     _mkdir
     _link_env_alias
-    # _update_venv
     _link_git_config
     _update_desktop
+    _update_profile
 }
 
 main
