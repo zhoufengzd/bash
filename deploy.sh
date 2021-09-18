@@ -58,6 +58,9 @@ function _link_env_alias() {
         ln -s $workspace/bin/_config/env $HOME/.env
         ln -s $workspace/bin/_config/alias $HOME/.alias
     fi
+
+    ln -s $wk_dir/bin/script/util $workspace/bin/script/util
+    ln -s $wk_dir/bin/script/ln.sh $workspace/bin/script/ln.sh
 }
 
 function _link_git_config() {
