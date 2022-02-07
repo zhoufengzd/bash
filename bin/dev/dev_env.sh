@@ -4,7 +4,7 @@ source $BASH_LIB/argparse.sh
 
 default_profile_path="$HOME/.env/dev_env"
 env_home="$HOME/workspace/bin/dev"
-evn_list="chrome|gcp|gradle|go|glide|java|maven"
+evn_list="chrome|gcp|gradle|go|glide|java|maven|node"
 
 function __help {
     script_name=$(basename "$0")
@@ -83,17 +83,18 @@ function main() {
     fi
 
     if [[ $env_name == "java"* ]] || [[ $env_name == "all" ]]; then
-        jdk_version="jdk-11.0.2"
-        if [[ $env_name == "java9" ]]; then
-            jdk_version="jdk-9.0.4";
+        jdk_version="jdk1.8.0_301"
+        if [[ $env_name == "java17" ]]; then
+            jdk_version="jdk-17.0.1.jdk";
         elif [[ $env_name == "java8" ]]; then
-            jdk_version="jdk1.8.0_301"
+            jdk_version="jdk8u312-b07"
         fi
-        if [[ $(uname) == "Darwin" ]]; then
-            java_home="/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home"
-        else
-            java_home="$env_home/$jdk_version"
-        fi
+        # if [[ $(uname) == "Darwin" ]]; then
+        #     java_home="/Library/Java/JavaVirtualMachines/$jdk_version.jdk/Contents/Home"
+        # else
+        #     java_home="$env_home/$jdk_version/Contents/Home"
+        # fi
+        java_home="$env_home/$jdk_version/Contents/Home"
 
         echo "export JAVA_HOME=$java_home" >> $profile_path
         paths[$idx]="\$JAVA_HOME/bin" && idx=$((idx+1))
@@ -103,6 +104,19 @@ function main() {
         m2_home="$env_home/apache-maven-3.6.1"
         echo "export M2_HOME=$m2_home" >> $profile_path
         paths[$idx]="\$M2_HOME/bin" && idx=$((idx+1))
+    fi
+
+    if [[ $env_name == "node"* ]] || [[ $env_name == "all" ]]; then
+        if [[ $(uname) == "Darwin" ]]; then
+            if [[ $env_name == "node14" ]]; then
+                node_home="/usr/local/opt/node@14";
+            else
+                node_home="/usr/local/opt/node@16";
+            fi
+        fi
+
+        echo "export NODE_HOME=$node_home" >> $profile_path
+        paths[$idx]="\$NODE_HOME/bin" && idx=$((idx+1))
     fi
 
     if [[ $env_name == "all" ]]; then echo "" >> $profile_path; fi

@@ -53,6 +53,7 @@ function __parse_arguments {
         fi
     done
     args_count=idx
+    # echo "${args[*]}"   # print all args
 
     # check required parameters
     if [ ! -z ${args[$KEY_HELP]} ]; then

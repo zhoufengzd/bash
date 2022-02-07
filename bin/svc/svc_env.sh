@@ -8,8 +8,8 @@ wk_dir=$(pwd)
 script_dir="$(cd "$(dirname "$(readlink ${BASH_SOURCE[0]})")" && pwd)"
 
 default_profile_path="$HOME/.env/service_env"
-service_home="/host/bin/svc"
-config_home="/host/config"
+service_home="$HOME/workspace/bin/svc/bin"
+config_home="$HOME/workspace/bin/svc/data/config"
 svc_list="airflow|elasticsearch|h2o|hadoop|kibana|mongo|mysql|nifi|postgres|rabbit|redis"
 
 function __help {
@@ -96,7 +96,7 @@ function __set_service {
     # mysql
     if [[ $svc_name == "mysql" ]] || [[ $svc_name == "all" ]]; then
         if [[ $(uname) == "Darwin" ]]; then
-            mysql_home=/usr/local/opt/mysql@5.7
+            mysql_home=$service_home/mysql5.7
         else
             # mysql_home=$service_home/mysql-5.7.18-linux-glibc2.5-x86_64
             mysql_home=$service_home/mysql-8.0.13-linux-glibc2.12-x86_64
