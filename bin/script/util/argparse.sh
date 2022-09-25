@@ -9,7 +9,6 @@ declare -A key_map
 
 VALUE_DUMMY="true"
 KEY_HELP="help"
-
 key_map["h"]=$KEY_HELP
 
 function __try_map_key {

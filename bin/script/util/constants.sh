@@ -1,5 +1,8 @@
 # shared common script constants
 
+## IFS
+default_ifs="$IFS"
+
 ## lines
 SC_SHORT_LINE="------------------------------------"
 SC_LONG_LINE="---------------------------------------------------------------------------------"

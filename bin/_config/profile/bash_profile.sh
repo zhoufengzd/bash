@@ -22,6 +22,7 @@ export BASH_LIB="$local_bin/util"
 envs=$(ls $HOME/.env/* 2>/dev/null)
 for env in ${envs[@]}; do source $env; done
 
-## aliases
-aliases=$(ls $HOME/.alias/* 2>/dev/null)
+## aliases: load sys_env.sh first
+aliases=$(ls $HOME/.alias/* 2>/dev/null | grep -v sys_env.sh)
+source $HOME/.alias/sys_env.sh
 for alias in ${aliases[@]}; do source $alias; done
