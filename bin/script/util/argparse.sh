@@ -9,7 +9,6 @@ declare -A key_map
 
 VALUE_DUMMY="true"
 KEY_HELP="help"
-
 key_map["h"]=$KEY_HELP
 
 function __try_map_key {
@@ -53,6 +52,7 @@ function __parse_arguments {
         fi
     done
     args_count=idx
+    # echo "${args[*]}"   # print all args
 
     # check required parameters
     if [ ! -z ${args[$KEY_HELP]} ]; then

@@ -43,9 +43,10 @@ function main() {
     fi
 
     profile_path=".""$svc_name""_env"
-    /host/bin/svc/svc_env.sh set $svc_name $profile_path && source $profile_path && rm $profile_path
+    $HOME/workspace/bin/script/svc_env.sh set $svc_name $profile_path && source $profile_path && rm $profile_path
     local pids=""
     if [[ $svc_name == "airflow" ]] || [[ $svc_name == "all" ]]; then
+        source $HOME/workspace/bin/svc/bin/venv/py_env/airflow/bin/activate
         if [[ $action == "start" ]]; then
             echo "airflow scheduler"
             airflow scheduler >> /dev/null 2>&1 &

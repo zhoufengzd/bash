@@ -1,17 +1,17 @@
 #!/usr/bin/env sh
 
-function script_name() {
+function __script_name() {
     # expect ${BASH_SOURCE[0]}
     local bash_src=$1
     script_name=$(basename "$bash_src")
     echo ${script_name}
 }
 
-function wk_dir() {
+function __wk_dir() {
     echo $(pwd)
 }
 
-function script_dir() {
+function __script_dir() {
     # expect ${BASH_SOURCE[0]}
     local bash_src=$1
     local script_path=${bash_src}

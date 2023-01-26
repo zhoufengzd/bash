@@ -10,7 +10,7 @@ script_dir="$(cd "$(dirname "$(readlink ${BASH_SOURCE[0]})")" && pwd)"
 function __help {
     script_name=$(basename "$0")
     echo "Usage: $script_name <action> <target> [options]"
-    echo "  action: [push|pull|delete|info|run|stop|connect|setenv]"
+    echo "  action: [push|pull|delete|info|run|stop|connect|setenv|ctxt]"
     echo "    note: all actions are docker image operations except \"setenv\"."
     echo "  target: <image_tag | image_tag=image_id>"
     echo "     image_tag: <tag_name | image_name:image_version>. use \"?\" to list all images."
@@ -44,7 +44,7 @@ function __list_all_clusters {
     cluster_list=()
     cluster_map=()
 
-    local map_idx=1
+    local idx=1
     local projects=$(gcloud projects list | grep -v "PROJECT_ID" | awk '{print $1}')
     for proj in ${projects[@]}; do
         if [[ $target_proj != "?" ]] && [[ $target_proj != $proj ]]; then
@@ -55,13 +55,13 @@ function __list_all_clusters {
         for line in "${out_lines[@]}"; do
             local cluster=$(echo $line | awk '{print $1}')
             local zone=$(echo $line | awk '{print $2}')
-            cluster_list[$map_idx]="$cluster --zone $zone --project $proj"
-            cluster_map[$cluster]=${cluster_list[$map_idx]}
+            cluster_list[$idx]="$cluster --zone $zone --project $proj"
+            cluster_map[$cluster]=${cluster_list[$idx]}
+            idx=$((idx+1))
 
             if [[ $target_cluster == $cluster ]]; then
                 return
             fi
-            map_idx=$((map_idx+1))
         done
     done
 }
@@ -97,10 +97,10 @@ function main() {
     if [ -z $gcp_project ] || [[ $gcp_project == $VALUE_DUMMY ]]; then
         gcp_project=$curr_proj
     fi
-    if [[ $gcp_project != $curr_proj ]] || [[ $action == "setenv" ]]; then
-        cmd="gcloud config set project $gcp_project"
-        echo $cmd && $cmd
-    fi
+    # if [[ $gcp_project != $curr_proj ]] || [[ $action == "setenv" ]]; then
+    #     cmd="gcloud config set project $gcp_project"
+    #     echo $cmd && $cmd
+    # fi
 
     ##1.3 -- kubernetes cluster
     local cluster=${args["cluster"]}
@@ -111,8 +111,36 @@ function main() {
     fi
     if [[ $cluster != $cluster_default ]] || [[ $action == "setenv" ]]; then
         __list_all_clusters $gcp_project $cluster
-        cmd="gcloud container clusters get-credentials ${cluster_map[$cluster]}"
+
+        if [[ "${cluster}" != "?" ]]; then  # prompt user to choose from running instance
+            echo "Please pick the vm to connect [enter 0 to quit]:"
+            for k in "${!cluster_list[@]}"; do
+                echo "${k}: ${cluster_list[$k]}"
+            done
+            read map_idx
+            if [ $map_idx -lt 1 ]; then
+                exit
+            fi
+            cluster_spec="${cluster_list[$map_idx]}"
+        else
+            cluster_spec="${cluster_map[$cluster]}"
+        fi
+
+        cmd="gcloud container clusters get-credentials ${cluster_spec}"
         echo $cmd && $cmd
+    fi
+
+    if [[ $action == "ctxt" ]]; then
+        cmd="kubectl config get-contexts"
+        echo $cmd && $cmd
+
+        echo "Please pick the context to switch [enter 0 to quit]:"
+        read k8_ctxt
+        if [[ $k8_ctxt == "0" ]]; then exit; fi
+
+        cmd="kubectl config use-context ${k8_ctxt}"
+        echo $cmd && $cmd
+        exit
     fi
 
     local image_bucket=${args["storage"]}

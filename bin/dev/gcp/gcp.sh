@@ -1,74 +1,21 @@
 #!/usr/bin/env bash
-##   Help interact with google cloud
-source $BASH_LIB/argparse.sh
-source $BASH_LIB/constants.sh
+##   Helper function to interact with google cloud
+. $BASH_LIB/argparse.sh
+. $BASH_LIB/constants.sh
+. $BASH_LIB/environment.sh
+. $BASH_LIB/script_util.sh
 
 ## environment:
-default_ifs="$IFS"
-wk_dir=$(pwd)
-script_dir="$(cd "$(dirname "$(readlink ${BASH_SOURCE[0]})")" && pwd)"
+script_dir="$(__script_dir ${BASH_SOURCE[0]})"
+script_name="$(__script_name ${BASH_SOURCE[0]})"
+wk_dir="$(__wk_dir ${BASH_SOURCE[0]})"
 
-shared_settings="__shared__"
-projects=""
-declare -A project_settings
-
+## default profile
 default_profile_path=$HOME/.env/gcp_env
 
-### specialized config function
-function __load_config() {
-    local in_file=$1
-    local proj=$2
-
-    project_settings=()
-    projects=""
-
-    local idx=0
-    local project_name=""
-    local read_settings="false"
-    while IFS='' read -r line || [[ -n "$line" ]]; do
-        if [[ ${line:0:1} == "#" ]] || [ -z "$line" ]; then  # skip comments and empty lines
-            continue
-        fi
-
-        if [[ ${line:0:1} == "[" ]]; then
-            project_name=${line//"["/}
-            project_name=${project_name//"]"/}
-
-            if [[ $project_name != "$shared_settings" ]]; then
-                if [[ ! -z $projects ]]; then
-                    projects+="|"
-                fi
-                projects+=$project_name
-            fi
-
-            if [[ $project_name == "$proj" ]] || [[ $project_name == "$shared_settings" ]]; then
-                read_settings="true"
-            else
-                read_settings="false"
-            fi
-            continue
-        fi
-
-        if [[ $read_settings == "true" ]]; then
-            #IFS="="; read -a element_array <<< "${line}"; IFS=''
-            #project_settings[${element_array[0]}]=${element_array[1]}
-            project_settings[$idx]="$line" && idx=$((idx+1))
-        fi
-    done < "$in_file"
-    IFS=$default_ifs
-}
-
 function __help {
-    if [ -z $projects ]; then
-        __load_config $script_dir/gcp.config "$shared_settings"
-    fi
-
-    script_name=$(basename "$0")
-    echo "Usage: $script_name <action> [project]"
-    echo "  action: [info|setenv]"
-    echo "  project: [$projects] "
-    echo "    required for \"setenv\". check \"$script_dir/gcp.config\" for more detail."
-    echo "    optional for \"info\". may use \"?\" to get detailed info for current project."
+    sed -e "s/{{script_name}}/${script_name}/g" \
+			$script_dir/_config/gcp/help.info
 }
 
 function main() {
@@ -87,49 +34,19 @@ function main() {
         echo $SC_SHORT_LINE && echo ""
 
         if [ ! -z $proj_opt ]; then
-            cmd="gcloud projects list"
-            echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-
-            cmd="gcloud config list"
-            echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-
-            cmd="gcloud auth list"
-            echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-
-            cmd="gcloud container clusters list"
-            echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-
-            #cmd="gcloud components list"
-            #echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
+            __run_cmd $script_dir/_config/gcp/info.cmd.sh
         fi
     else
         if [ -z $proj_opt ]; then
             echo "Error! Target project is expected. "; exit
         fi
 
-        __load_config $script_dir/gcp.config $proj_opt
-        echo "# gcp project environment settings" > $default_profile_path
-        #echo "export KUBECONFIG=\$KUBECONFIG:\$HOME/.kube/config" >> $default_profile_path
-        echo "" >> $default_profile_path
+        cat $script_dir/_config/gcp/default_pre.config  > $default_profile_path  && echo "" >> $default_profile_path
+        cat $script_dir/_config/gcp/$proj_opt.config    >> $default_profile_path && echo "" >> $default_profile_path
+        cat $script_dir/_config/gcp/default_post.config >> $default_profile_path && echo "" >> $default_profile_path
 
-        for ((i=0; i<${#project_settings[*]}; i++)); do
-            echo "${project_settings[$i]}" >> $default_profile_path
-        done
-
-        source $default_profile_path
-        cmd="gcloud config set project $GCP_PROJECT"
-        echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-
-        ## TODO: temporarily disabled
-        # cmd="gcloud config set compute/region $GCP_REGION"
-        # echo $cmd && $cmd > /dev/null 2>&1
-        # cmd="gcloud config set compute/zone $GCP_ZONE"
-        # echo $cmd && echo $SC_SHORT_LINE && $cmd > /dev/null 2>&1 && echo ""
-        #
-        # if [ ! -z "$GCP_CLUSTER" ]; then
-        #     cmd="gcloud container clusters get-credentials $GCP_CLUSTER"
-        #     echo $cmd && echo $SC_SHORT_LINE && $cmd && echo ""
-        # fi
+        . $default_profile_path
+        gcloud config set project $GCP_PROJECT
     fi
 }
 

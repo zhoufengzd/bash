@@ -32,8 +32,23 @@ function pypath() {
     echo PYTHONPATH=$PYTHONPATH
 }
 
+function pjson() {
+    json_file=$1
+    cat $json_file | python -m json.tool > tmp.json
+    cat tmp.json
+    echo -e "\nreplace $json_file? [Y|N]:"
+    read reply
+    if [[ $reply == "Y"* ]] | [[ $reply == "y"* ]]; then
+        mv tmp.json $json_file
+    else
+        rm tmp.json
+    fi
+}
+
 alias venv="if [ -e ./venv/bin/activate ]; then source ./venv/bin/activate; else python3 -m venv venv && source ./venv/bin/activate; fi"
 alias pipup="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip install --upgrade && pip install pipdeptree > /dev/null"
 alias pipoff="pip freeze --local | grep -v '^\-e' | cut -d = -f 1  | xargs -n1 pip uninstall -y"
 
 alias condaenv="source /usr/local/Caskroom/miniconda/base/etc/profile.d/conda.sh"
+
+# charm: opens up pycharm
