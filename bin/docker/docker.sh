@@ -15,8 +15,9 @@ script_dir="$(cd "$(dirname "$(readlink ${BASH_SOURCE[0]})")" && pwd)"
 function __help() {
     script_name=$(basename "$0")
     echo "Usage: $script_name <action> <image_name> [options]"
-    echo "  action: [run|rm,remove|c,config]. "
-    echo "    remove:  remove stoped containers and images. "
+    echo "  action: [run, clean, remove|rm, config|c]. "
+    echo "    clean:  remove stoped container. "
+    echo "    remove: remove stoped containers and images. "
     echo "    config: set default docker mount directories, docker hostname, etc. "
     echo "  image_name: "
     echo "    tag or id to run or remove images."
@@ -40,7 +41,7 @@ function __set_env() {
     echo "export DOCKER_MOUNT_DIR=\"\$DOCKER_MOUNT_DIR -v $HOME/workspace:/host/workspace\"" >> $profile_path
 
     # local host_dir="/host"
-    # local source_dir="$HOME/workspace/docker_images/_shared" 
+    # local source_dir="$HOME/workspace/docker_images/_shared"
     # local -a dirs=(bin config data log downloads workspace)
 
     # sudo mkdir -p $host_dir && cd $host_dir
@@ -54,6 +55,17 @@ function __set_env() {
     cmd="cat $profile_path"
     echo $cmd && echo "" && $cmd
     cd $wk_dir
+}
+
+function __clean() {
+    echo "clean container cache..."
+    cmd="docker ps -a -q -f status=created -f status=paused -f status=exited -f status=dead"
+    echo $cmd
+    cids=$(${cmd})
+    if [ ! -z "$cids" ]; then
+        cmd="docker rm -v $cids"
+        echo $cmd && if [ -z ${args["preview"]} ]; then $cmd > /dev/null 2>&1; fi
+    fi
 }
 
 function main() {
@@ -70,12 +82,12 @@ function main() {
 
     image=${args[1]}
     local cmd=""
+    if [[ $action == "clean" ]]; then
+        __clean; return
+    fi
+
     if [[ $action == "remove" ]] || [[ $action == "rm" ]]; then
-        cids=$(docker ps -a -q -f status=exited)
-        if [ ! -z "$cids" ]; then
-            cmd="docker rm -v $cids"
-            echo $cmd && if [ -z ${args["preview"]} ]; then $cmd > /dev/null 2>&1; fi
-        fi
+        __clean
 
         if [ -z "$image" ] || [[ $image == "-"* ]]; then image="<none>"; fi
         imgids=$(docker images | grep "$image" | awk '{print $3}')

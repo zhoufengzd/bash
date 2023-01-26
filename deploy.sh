@@ -50,7 +50,7 @@ function _update_profile() {
 
     cd $wk_dir
     cmd="ln -s $wk_dir/bin/_config/profile/bash_profile.sh $HOME/.bash_profile"
-    echo $cmd && $cmd
+    $cmd
 }
 
 function _link_env_alias() {
